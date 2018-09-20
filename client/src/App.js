@@ -1,33 +1,49 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import BinanceLayout from './Components/BinanceLayout.js';
+import CoinLayout from './Components/CoinLayout.js';
 import axios from 'axios';
 
 class App extends Component {
   
   state = {
     loaded: false,
-    symbols: []
+    binanceSymbols: [],
+    bittrexSymbols: []
   }
 
-  async getBinanceData() {
+  async getMarketData() {
     try {
-      const response = await axios.get('http://localhost:8080/binance');
-      setInterval(this.setState({ loaded: true}), 3000)
-      console.log(response.data.symbols)
-      // this.setState({ loaded: true})     
-      // this.setState({ symbols: response.data.symbols})
+      const binanceResponse = await axios.get('http://localhost:8080/binance');
+      let binanceSymbols = binanceResponse.data.map((coin) => (
+          {symbol: coin.symbol,
+          price: coin.price}
+      ))
+      const bittrexResponse = await axios.get('http://localhost:8080/bittrex');
+      let bittrexSymbols = bittrexResponse.data.map((coin) => (
+          {symbol: coin.symbol,
+          price: coin.price}
+      ))
+      const okexResponse = await axios.get('http://localhost:8080/okex');
+      let okexSymbols = okexResponse.data.map((coin) => (
+          {symbol: coin.symbol,
+          price: coin.price}
+      ))         
+      this.setState({
+        binanceSymbols,
+        bittrexSymbols,
+        okexSymbols,
+        loaded: true
+      })  
     } catch (error) {
       console.error(error);
     }
   }
 
   componentWillMount() {
-    this.getBinanceData()
+    this.getMarketData()
   }
   render() {
-     
       return this.state.loaded === true ? (
         <React.Fragment>
           <div className="App">
@@ -36,8 +52,7 @@ class App extends Component {
               <h1 className="App-title">Cryptocurrency Arbitrage</h1>
             </header>
           </div>
-        <BinanceLayout symbols={this.state.symbols} />
-        {/* <p> {this.state.symbols} </p> */}
+        <CoinLayout binanceSymbols={this.state.binanceSymbols} bittrexSymbols={this.state.bittrexSymbols} okexSymbols={this.state.okexSymbols} />
         </React.Fragment>
       ) : (
         <React.Fragment>
