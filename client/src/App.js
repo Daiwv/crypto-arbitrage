@@ -3,13 +3,15 @@ import logo from './logo.svg';
 import './App.css';
 import CoinLayout from './Components/CoinLayout.js';
 import axios from 'axios';
+import 'typeface-roboto';
 
 class App extends Component {
   
   state = {
     loaded: false,
     binanceSymbols: [],
-    bittrexSymbols: []
+    bittrexSymbols: [],
+    okexSymbols: []
   }
 
   async getMarketData() {
@@ -72,3 +74,9 @@ class App extends Component {
 }
 
 export default App;
+
+// let availableCoin = 
+// let coinPrice = {
+//   "BTC-LTC": {"Binance": 0.458734, "Bittrex": 0.0002343, "OKEx": 0.4385734},
+//   "BTC-NEO": {}
+// }
