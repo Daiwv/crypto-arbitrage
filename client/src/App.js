@@ -9,34 +9,55 @@ class App extends Component {
   
   state = {
     loaded: false,
-    binanceSymbols: [],
-    bittrexSymbols: [],
-    okexSymbols: []
+		allSymbols: {}
+
   }
 
   async getMarketData() {
     try {
-      const binanceResponse = await axios.get('http://localhost:8080/binance');
-      let binanceSymbols = binanceResponse.data.map((coin) => (
-          {symbol: coin.symbol,
-          price: coin.price}
-      ))
-      const bittrexResponse = await axios.get('http://localhost:8080/bittrex');
-      let bittrexSymbols = bittrexResponse.data.map((coin) => (
-          {symbol: coin.symbol,
-          price: coin.price}
-      ))
+
+			const allSymbolsResponse = {};
+			const binanceResponse = await axios.get('http://localhost:8080/binance');
+			const binanceData = binanceResponse.data;
+
+			binanceData.forEach((binance) => {
+				if (allSymbolsResponse[binance.symbol]) {
+					allSymbolsResponse[binance.symbol]['binance'] = binance.price;
+				} else {
+					allSymbolsResponse[binance.symbol] = {};
+					allSymbolsResponse[binance.symbol]['binance'] = binance.price;
+				}
+			});
+
+			const bittrexResponse = await axios.get('http://localhost:8080/binance');
+			const bittrexData = bittrexResponse.data;
+
+			bittrexData.forEach((bittrex) => {
+				if (allSymbolsResponse[bittrex.symbol]) {
+					allSymbolsResponse[bittrex.symbol]['bittrex'] = bittrex.price;
+				} else {
+					allSymbolsResponse[bittrex.symbol] = {};
+					allSymbolsResponse[bittrex.symbol]['bittrex'] = bittrex.price;
+				}
+			});
+      
       const okexResponse = await axios.get('http://localhost:8080/okex');
-      let okexSymbols = okexResponse.data.map((coin) => (
-          {symbol: coin.symbol,
-          price: coin.price}
-      ))         
+			const okexData = okexResponse.data;
+
+			okexData.forEach((okex) => {
+				if (allSymbolsResponse[okex.symbol]) {
+					allSymbolsResponse[okex.symbol]['okex'] = okex.price;
+				} else {
+					allSymbolsResponse[okex.symbol] = {};
+					allSymbolsResponse[okex.symbol]['okex'] = okex.price;
+				}
+			});
+
       this.setState({
-        binanceSymbols,
-        bittrexSymbols,
-        okexSymbols,
+        allSymbols: {...allSymbolsResponse},
         loaded: true
-      })  
+      }) 
+
     } catch (error) {
       console.error(error);
     }
@@ -46,6 +67,7 @@ class App extends Component {
     this.getMarketData()
   }
   render() {
+		console.log(this.state)
       return this.state.loaded === true ? (
         <React.Fragment>
           <div className="App">
@@ -54,7 +76,7 @@ class App extends Component {
               <h1 className="App-title">Cryptocurrency Arbitrage</h1>
             </header>
           </div>
-        <CoinLayout binanceSymbols={this.state.binanceSymbols} bittrexSymbols={this.state.bittrexSymbols} okexSymbols={this.state.okexSymbols} />
+        <CoinLayout allSymbols={this.state.allSymbols} />
         </React.Fragment>
       ) : (
         <React.Fragment>
@@ -74,9 +96,3 @@ class App extends Component {
 }
 
 export default App;
-
-// let availableCoin = 
-// let coinPrice = {
-//   "BTC-LTC": {"Binance": 0.458734, "Bittrex": 0.0002343, "OKEx": 0.4385734},
-//   "BTC-NEO": {}
-// }
