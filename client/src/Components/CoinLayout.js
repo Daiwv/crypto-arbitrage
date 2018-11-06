@@ -3,14 +3,15 @@ import 'typeface-roboto'
 
 
 const CoinLayout = (props) => {
-	let symbols = props.allSymbols
+	const symbols = props.allSymbols.map((e, i) =>(<div key={i}>{e}</div>))
 	
     
     return (
         <div>
 					{ symbols }
+					hi
         </div>
     )
-}
+};
 
-export default CoinLayout;
+export default CoinLayout;	
