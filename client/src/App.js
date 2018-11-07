@@ -8,7 +8,7 @@ class App extends Component {
   
   state = {
     loaded: false,
-		allSymbols: {}
+		allSymbols: []
 
   }
 
@@ -51,11 +51,21 @@ class App extends Component {
 					allSymbolsResponse[okex.symbol]['okex'] = okex.price;
 				}
 			});
+let symbolArr = []
+
+
+			    const marketData = Object.entries(allSymbolsResponse)
+					for (let [symbol, exchange] of marketData) {
+						let tempObj = {symbol: symbol, exchange: exchange}
+						symbolArr.push(tempObj)
+					}
 
       this.setState({
-        allSymbols: {...allSymbolsResponse},
+        allSymbols: symbolArr,
         loaded: true
       }) 
+		console.log(allSymbolsResponse)
+
 
     } catch (error) {
       console.error(error);
@@ -65,6 +75,7 @@ class App extends Component {
   componentWillMount() {
     this.getMarketData()
   }
+
   render() {
       return this.state.loaded === true ? (
         <React.Fragment>
