@@ -1,15 +1,18 @@
 import React from 'react';
-import 'typeface-roboto'
 
 
 const CoinLayout = (props) => {
-	const symbols = props.allSymbols.map((e, i) =>(<div key={i}>{e}</div>))
-	
+  
+  const displaySymbols = () => {
+    const marketData = Object.entries(props.allSymbols)
+    for (const [symbol, exchange] of marketData) {
+      <p>`${symbol} is being sold on ${exchange.binance}`</p>
+    }
+  }
     
     return (
         <div>
-					{ symbols }
-					hi
+					{displaySymbols}
         </div>
     )
 };

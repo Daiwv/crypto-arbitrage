@@ -3,7 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 import CoinLayout from './Components/CoinLayout.js';
 import axios from 'axios';
-import 'typeface-roboto';
 
 class App extends Component {
   
@@ -67,7 +66,6 @@ class App extends Component {
     this.getMarketData()
   }
   render() {
-		console.log(this.state)
       return this.state.loaded === true ? (
         <React.Fragment>
           <div className="App">
