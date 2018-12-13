@@ -3,11 +3,14 @@ import React from 'react';
 const CoinLayout = (props) => {
     return (
         <div>
-					{props.allSymbols.map((obj) => (
-      				<p>`${obj.symbol} is being sold on ${obj.exchange.binance}`</p>
+					{props.allResults.map((result) => (
+      				<p>{ result }</p>
 					))}
         </div>
     )
 };
 
 export default CoinLayout;	
+
+
+// `${obj.symbol} is being sold on{Object.keys(obj.exchange)}`
